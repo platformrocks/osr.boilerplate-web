@@ -1,0 +1,188 @@
+$schema: .guided/schema/prompt.schema.json
+apiVersion: ops/v1
+id: web.generate-page
+title: Generate localized page with layout, metadata, and translation files
+persona: PageGenerator
+category: implementation
+difficulty: medium
+workspace: ./src
+context: |
+  This project uses:
+    - Next.js 15 App Router
+    - TypeScript and Tailwind CSS v4
+    - shadcn/ui component system
+    - Internationalization with `next-intl` and routing by locale
+    - Translation messages stored in `src/i18n/messages/*.json`
+    - i18n supported: pt-BR (default), en-US, es-ES
+
+  All new pages must:
+    - Be created in `src/app/[locale]/[routePath]/page.tsx`
+    - Include proper layout using shadcn/ui
+    - Support full i18n
+    - Add text keys to JSONs in `src/i18n/messages/*`
+    - Optionally generate `layout.tsx` and `generateMetadata`
+    - Pass lint, type-check, and format
+    - Be tracked em `.guided/operation/worklog.md`
+
+output:
+  - file: src/app/[locale]/[routePath]/page.tsx
+    language: typescript
+    rules:
+      - Include SPDX license header
+      - Use `useTranslations` from `next-intl`
+      - Text keys must reference i18n namespace
+      - Layout must follow Tailwind + shadcn/ui patterns
+  - file: src/app/[locale]/[routePath]/layout.tsx (optional)
+    language: typescript
+    rules:
+      - Generate only if withLayout is true
+      - Provide `children` slot and base layout structure
+  - file: src/i18n/messages/pt-BR.json
+    language: json
+    rules:
+      - Add translation key-value pairs inside the correct namespace
+  - file: src/i18n/messages/en-US.json
+    language: json
+    rules:
+      - Add translated key-value pairs (stub OK)
+  - file: src/i18n/messages/es-ES.json
+    language: json
+    rules:
+      - Add translated key-value pairs (stub OK)
+  - file: src/e2e/[routePath].spec.ts
+    language: typescript
+    rules:
+      - Simple Playwright test that checks if the page renders and the main title is visible
+  - file: .guided/operation/worklog.md
+    language: markdown
+    rules:
+      - Append route, layout, metadata, i18n keys added, timestamp
+
+steps:
+  - id: define-context
+    description: Analyze project structure and validate existing constraints
+    action: |
+      Review:
+        - Project structure rooted in `src/`
+        - Pages must exist in `src/app/[locale]/<route>`
+        - i18n files are in JSON under `src/i18n/messages`
+        - Playwright tests go under `src/e2e`
+        - Default locales: pt-BR, en-US, es-ES
+      Confirm those paths and ensure boilerplate structure exists.
+    expectedOutcome: |
+      Context confirmed for scaffold execution
+
+  - id: collect-input
+    description: Ask user guiding questions before proceeding
+    action: |
+      Prompt the user (human or LLM-assisted) with the following:
+
+      - Qual a rota da página? (e.g. `/dashboard`, `/relatorios/ativos`)
+      - Qual o contexto da página? (O que ela deve fazer? Exibir? Permitir?)
+      - Qual estrutura sugerida? (Cards? Tabela? Listagem? Gráfico?)
+      - Qual o título da página?
+      - Qual o propósito descritivo da página?
+      - Qual namespace i18n? (e.g. `dashboard.overview`)
+      - Deseja gerar layout.tsx? (true/false)
+      - Deseja gerar generateMetadata()? (true/false)
+    expectedOutcome: |
+      Todas as informações definidas para seguir com o scaffold
+
+  - id: scaffold-files
+    description: Create necessary folders and empty files
+    action: |
+      Create:
+        - src/app/[locale]/[routePath]/page.tsx
+        - src/app/[locale]/[routePath]/layout.tsx (if withLayout)
+        - Placeholder Playwright spec in src/e2e/
+    expectedOutcome: |
+      Project scaffold in place for all supported locales
+
+  - id: generate-page
+    description: Implement `page.tsx` for all locales
+    action: |
+      For each locale (pt-BR, en-US, es-ES):
+        - Create a page that uses `useTranslations`
+        - Render `<h1>{t('<namespace>.title')}</h1>`
+        - Wrap content with shadcn/ui components (`Card`, `Container`, etc.)
+        - Include license header
+    expectedOutcome: |
+      Localized page ready for each locale
+
+  - id: generate-layout
+    description: Create `layout.tsx` with shared wrapper
+    action: |
+      If `withLayout: true`, add layout that wraps `children`, optionally includes header or breadcrumb
+    expectedOutcome: |
+      Layout component scaffolded with proper slots
+
+  - id: generate-metadata
+    description: Export `generateMetadata()` with localized values
+    action: |
+      If `withMetadata: true`, export async `generateMetadata()` using `getMessages()` and `getTranslations()` from next-intl
+        - Title and description should be dynamic per locale
+    expectedOutcome: |
+      SEO-friendly metadata integrated per language
+
+  - id: update-i18n-jsons
+    description: Add new keys to translation JSON files
+    action: |
+      For each of:
+        - src/i18n/messages/pt-BR.json
+        - src/i18n/messages/en-US.json
+        - src/i18n/messages/es-ES.json
+      Add:
+
+      ```json
+      "<namespace>": {
+        "title": "<pageTitle>",
+        "description": "<purpose>"
+      }
+      ```
+    expectedOutcome: |
+      i18n keys added or updated for all languages
+
+  - id: generate-test
+    description: Add basic Playwright E2E test
+    action: |
+      Create `src/e2e/<routePath>.spec.ts`:
+        - Visit page
+        - Assert that main `h1` with localized title is visible
+    expectedOutcome: |
+      Minimal test file generated for smoke testing
+
+  - id: validate-code
+    description: Ensure all checks pass
+    action: |
+      Run:
+        - `pnpm format:check`
+        - `pnpm lint`
+        - `pnpm type-check`
+    expectedOutcome: |
+      All validations pass
+
+  - id: log-activity
+    description: Log the creation of the new page
+    action: |
+      Append entry to `.guided/operation/worklog.md` with:
+        - routePath
+        - pageTitle
+        - purpose
+        - layout: true/false
+        - metadata: true/false
+        - namespace
+        - locales updated
+        - timestamp
+    expectedOutcome: |
+      Worklog entry created for traceability
+
+tags:
+  - nextjs
+  - tailwind
+  - i18n
+  - layout
+  - metadata
+  - e2e
+  - scaffold
+createBy: guiofsaints
+version: 1.4.0
