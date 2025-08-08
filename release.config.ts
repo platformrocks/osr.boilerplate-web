@@ -10,6 +10,7 @@ const config = {
     tagName: 'v${version}',
     requireCleanWorkingDir: true,
     requireUpstream: true,
+    changelog: 'npx auto-changelog --stdout --commit-limit false --unreleased --template compact',
   },
   npm: false,
   github: {

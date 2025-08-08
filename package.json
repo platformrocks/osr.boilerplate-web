@@ -30,6 +30,7 @@
     "test:e2e:report": "playwright show-report",
     "test:e2e:install": "playwright install",
     "commit": "cz",
+    "changelog": "npx auto-changelog -p",
     "release": "release-it --no-npm",
     "prepare": "node .husky/install.mjs"
   },
