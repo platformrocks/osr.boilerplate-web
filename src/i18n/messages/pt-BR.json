@@ -1,0 +1,18 @@
+{
+  "metadatas": {
+    "title": "Open Source Rocks",
+    "description": "Iniciativa de Código Aberto pela platform.rocks",
+    "fullDescription": "Iniciativa de Código Aberto pela platform.rocks",
+    "keywords": ["Código Aberto", "platform.rocks", "i18n", "Next.js", "React", "TypeScript"],
+    "locale": "pt-BR"
+  },
+  "HomePage": {
+    "hello": "Olá",
+    "welcome": "Bem-vindo",
+    "logoAlt": "Logo de Open Source Rocks",
+    "languageSwitcher": "Selector de idioma"
+  },
+  "common": {
+    "currentLanguage": "idioma atual"
+  }
+}

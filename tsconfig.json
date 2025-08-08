@@ -1,0 +1,101 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["dom", "dom.iterable", "esnext", "webworker"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "exactOptionalPropertyTypes": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "jsxImportSource": "react",
+    "incremental": true,
+    "tsBuildInfoFile": ".next/cache/tsconfig.tsbuildinfo",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/lib/*": ["./src/lib/*"],
+      "@/utils/*": ["./src/utils/*"],
+      "@/hooks/*": ["./src/hooks/*"],
+      "@/types/*": ["./src/types/*"],
+      "@/styles/*": ["./src/styles/*"],
+      "@/app/*": ["./src/app/*"],
+      "@/components/ui/*": ["./src/components/ui/*"],
+      "@/components/forms/*": ["./src/components/forms/*"],
+      "@/components/layout/*": ["./src/components/layout/*"],
+      "@/public/*": ["./public/*"],
+      "@/assets/*": ["./src/assets/*"],
+      "@/config/*": ["./src/config/*"],
+      "@/constants/*": ["./src/constants/*"]
+    },
+    "forceConsistentCasingInFileNames": true,
+    "allowImportingTsExtensions": false,
+    "allowArbitraryExtensions": false,
+    "checkJs": false,
+    "verbatimModuleSyntax": false,
+    "allowUmdGlobalAccess": false,
+    "sourceMap": false,
+    "declaration": false,
+    "declarationMap": false,
+    "useDefineForClassFields": true,
+    "importsNotUsedAsValues": "remove"
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.js",
+    "**/*.jsx",
+    ".next/types/**/*.ts",
+    "src/**/*",
+    "tailwind.config.ts",
+    "postcss.config.js",
+    "next.config.js",
+    "middleware.ts",
+    "instrumentation.ts",
+    "global.d.ts",
+    "eslint.config.mjs"
+  ],
+  "exclude": [
+    "node_modules",
+    ".next",
+    "out",
+    "dist",
+    "build",
+    ".vercel",
+    ".turbo",
+    "coverage",
+    "cypress",
+    "e2e",
+    "**/*.stories.ts",
+    "**/*.stories.tsx",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx"
+  ],
+  "ts-node": {
+    "esm": true,
+    "compilerOptions": {
+      "module": "esnext",
+      "target": "es2022"
+    }
+  }
+}

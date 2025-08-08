@@ -1,0 +1,8 @@
+test/
+node_modules/
+.next/
+out/
+coverage/
+*.log
+.vscode/
+.env*

@@ -1,0 +1,16 @@
+[
+  {
+    "key": "ctrl+shift+f",
+    "command": "editor.action.formatDocument",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+shift+o",
+    "command": "editor.action.organizeImports",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+shift+r",
+    "command": "workbench.action.reloadWindow"
+  }
+]

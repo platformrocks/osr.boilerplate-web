@@ -1,0 +1,101 @@
+{
+  "semi": true,
+  "trailingComma": "all",
+  "singleQuote": true,
+  "printWidth": 100,
+  "tabWidth": 2,
+  "useTabs": false,
+  "endOfLine": "lf",
+  "arrowParens": "always",
+  "bracketSpacing": true,
+  "bracketSameLine": false,
+  "jsxSingleQuote": true,
+  "quoteProps": "as-needed",
+  "htmlWhitespaceSensitivity": "css",
+  "overrides": [
+    {
+      "files": ["*.md", "*.mdx"],
+      "options": {
+        "printWidth": 200,
+        "proseWrap": "always",
+        "tabWidth": 2
+      }
+    },
+    {
+      "files": ["*.json", "*.jsonc"],
+      "options": {
+        "printWidth": 120,
+        "tabWidth": 2
+      }
+    },
+    {
+      "files": ["package.json"],
+      "options": {
+        "printWidth": 120,
+        "tabWidth": 2,
+        "trailingComma": "none"
+      }
+    },
+    {
+      "files": ["*.yml", "*.yaml"],
+      "options": {
+        "tabWidth": 2,
+        "singleQuote": false,
+        "printWidth": 120
+      }
+    },
+    {
+      "files": ["*.css", "*.scss", "*.sass"],
+      "options": {
+        "singleQuote": false,
+        "printWidth": 120
+      }
+    },
+    {
+      "files": ["tailwind.config.*"],
+      "options": {
+        "printWidth": 120,
+        "singleQuote": true
+      }
+    },
+    {
+      "files": ["next.config.*"],
+      "options": {
+        "printWidth": 120,
+        "singleQuote": true
+      }
+    },
+    {
+      "files": ["*.d.ts"],
+      "options": {
+        "printWidth": 120,
+        "singleQuote": true
+      }
+    },
+    {
+      "files": ["*.test.ts", "*.test.tsx", "*.spec.ts", "*.spec.tsx", "**/__tests__/**/*"],
+      "options": {
+        "printWidth": 120,
+        "singleQuote": true
+      }
+    },
+    {
+      "files": ["*.stories.ts", "*.stories.tsx"],
+      "options": {
+        "printWidth": 120,
+        "singleQuote": true
+      }
+    }
+  ],
+  "plugins": ["@trivago/prettier-plugin-sort-imports", "prettier-plugin-tailwindcss"],
+  "importOrder": [
+    "^(react|next)(.*)$",
+    "^@?\\w",
+    "^@/(.*)$",
+    "^[./]",
+    "^(?!.*[.]css$)[./].*$",
+    ".css$"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
+}

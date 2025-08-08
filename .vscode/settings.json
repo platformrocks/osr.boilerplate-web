@@ -1,0 +1,225 @@
+{
+  // AI-Friendly Architecture Settings for OSR Boilerplate Web
+
+  // GitHub Copilot Configuration
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": false,
+    "markdown": true,
+    "scminput": false
+  },
+  "github.copilot.advanced": {
+    "length": 500,
+    "temperature": 0.1,
+    "top_p": 0.95
+  },
+
+  // Code Generation Guidelines
+  "github.copilot.chat.codeGeneration": {
+    "instructions": "Follow AI-Friendly Architecture principles: 1) Use semantic naming with clear purpose indication 2) Include comprehensive TypeScript types with JSDoc documentation 3) Follow Next.js 15 App Router patterns 4) Use Tailwind CSS 4 with Shadcn/UI components 5) Implement proper internationalization with next-intl 6) Include error handling and loading states 7) Use conventional commit messages 8) Maintain consistent file structure: src/app/, src/components/, src/lib/, src/hooks/ 9) Import order: React/Next -> 3rd party -> internal (@/) -> relative -> types 10) Component structure: JSDoc header, interface definition, implementation with examples"
+  },
+
+  // Test Generation
+  "github.copilot.chat.testGeneration": {
+    "framework": "Jest with React Testing Library",
+    "instructions": "Generate comprehensive tests following these patterns: 1) Test file naming: ComponentName.test.tsx 2) Test structure: describe block with component name, individual it blocks for each behavior 3) Test rendering, props handling, user interactions, and edge cases 4) Use screen queries from @testing-library/react 5) Mock external dependencies appropriately 6) Include accessibility tests where applicable 7) Test internationalization with mock translations 8) Cover error states and loading states 9) Use TypeScript for test files with proper typing"
+  },
+
+  // Commit Message Generation
+  "github.copilot.chat.commitMessageGeneration": {
+    "convention": "conventional",
+    "instructions": "Generate commit messages following Conventional Commits specification: 1) Format: type(scope): description 2) Types: feat, fix, docs, style, refactor, test, chore 3) Scope: component name, feature area, or file category 4) Description: present tense, lowercase, no period at end 5) Examples: 'feat(components): add CustomButton with variant support', 'fix(api): resolve authentication edge case', 'docs(readme): update installation steps' 6) Keep first line under 72 characters 7) Include body for complex changes explaining what and why"
+  },
+
+  // Pull Request Generation
+  "github.copilot.chat.pullRequestGeneration": {
+    "template": "AI-Friendly PR",
+    "instructions": "Generate PR descriptions with these sections: ## Summary (Brief description of changes), ## Type of Change (feat/fix/docs/style/refactor/test/chore), ## AI-Friendly Improvements (How this enhances AI understanding/navigation), ## Testing (Test coverage and validation), ## Documentation (Updated docs, JSDoc comments), ## Breaking Changes (If any), ## Checklist (Code follows conventions, tests pass, docs updated, types are comprehensive). Focus on how changes improve codebase clarity and AI compatibility."
+  },
+
+  // Documentation Generation
+  "github.copilot.chat.docGeneration": {
+    "style": "JSDoc with examples",
+    "instructions": "Generate comprehensive documentation: 1) JSDoc comments for all exported functions/components 2) Include @param with type and description 3) Include @returns with type and description 4) Add @example with practical usage 5) Use @since for version tracking 6) Include @deprecated when applicable 7) Component props: describe each prop's purpose, type, and default value 8) API functions: include error handling examples 9) Complex algorithms: add inline comments explaining logic 10) README sections: clear structure with prerequisites, installation, usage examples, and contribution guidelines"
+  },
+
+  // Code Review Assistant
+  "github.copilot.chat.codeReview": {
+    "focus": "AI-Friendly Architecture compliance",
+    "instructions": "Review code for: 1) Semantic naming conventions (descriptive, purposeful names) 2) TypeScript completeness (all parameters/returns typed) 3) Component structure (proper JSDoc, clear interfaces, consistent patterns) 4) Import organization (correct order and aliasing) 5) Error handling implementation 6) Performance considerations (memo, callbacks, loading states) 7) Accessibility compliance 8) Security best practices 9) Internationalization support 10) Testing coverage 11) Documentation quality 12) AI tool compatibility (clear patterns, predictable structure)"
+  },
+
+  // Refactoring Guidance
+  "github.copilot.chat.refactoring": {
+    "approach": "Incremental with documentation",
+    "instructions": "When refactoring: 1) Maintain or improve TypeScript type safety 2) Preserve component API compatibility 3) Update JSDoc comments to reflect changes 4) Ensure test coverage for refactored code 5) Update related documentation 6) Follow established patterns consistently 7) Consider performance implications 8) Maintain internationalization support 9) Keep error handling robust 10) Use semantic naming for new abstractions 11) Document architectural decisions in .guided/ folder"
+  },
+
+  // Copilot Chat Settings
+  "github.copilot.chat.welcomeMessage": "never",
+  "github.copilot.chat.localeOverride": "en",
+
+  // Auto-completion settings optimized for AI assistance
+  "editor.suggestSelection": "first",
+  "editor.tabCompletion": "on",
+  "editor.wordBasedSuggestions": "matchingDocuments",
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": true,
+    "strings": true
+  },
+
+  // Editor Configuration
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.formatOnType": false,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  // Language-specific Formatters
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features",
+    "editor.formatOnSave": true
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.wordWrap": "on"
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+
+  // Code Actions
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit",
+    "source.removeUnusedImports": "explicit",
+    "source.sortImports": "never"
+  },
+
+  // Prettier Configuration
+  "prettier.requireConfig": true,
+  "prettier.useEditorConfig": false,
+  "prettier.resolveGlobalModules": true,
+
+  // ESLint Configuration
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+  "eslint.format.enable": false,
+  "eslint.codeActionsOnSave.mode": "problems",
+  "eslint.workingDirectories": [{ "mode": "auto" }],
+  "eslint.enable": true,
+  "eslint.run": "onType",
+  "eslint.probe": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+  "eslint.alwaysShowStatus": true,
+  "eslint.lintTask.enable": true,
+
+  // TypeScript Configuration
+  "typescript.validate.enable": true,
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "typescript.suggest.autoImports": true,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+
+  // JavaScript Configuration
+  "javascript.validate.enable": false,
+
+  // File Management
+  "files.autoSave": "onFocusChange",
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/.next/**": true,
+    "**/dist/**": true,
+    "**/build/**": true,
+    "**/.turbo/**": true
+  },
+
+  // Editor Settings
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "problems.decorations.enabled": true,
+  "breadcrumbs.enabled": true,
+  "explorer.compactFolders": false,
+
+  // Emmet Configuration
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact",
+    "typescript": "typescriptreact"
+  },
+
+  // Tailwind CSS Configuration
+  "tailwindCSS.includeLanguages": {
+    "typescript": "typescript",
+    "typescriptreact": "typescriptreact"
+  },
+  "tailwindCSS.experimental.classRegex": [
+    ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["cn\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["clsx\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
+  ],
+
+  // Search Configuration
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/*.code-search": true,
+    "**/.next": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/.turbo": true,
+    "**/coverage": true
+  },
+
+  // Extension Recommendations
+  "extensions.recommendations": [
+    "github.copilot",
+    "github.copilot-chat",
+    "ms-vscode.vscode-typescript-next",
+    "bradlc.vscode-tailwindcss",
+    "esbenp.prettier-vscode",
+    "ms-vscode.vscode-eslint",
+    "formulahendry.auto-rename-tag",
+    "christian-kohler.path-intellisense"
+  ]
+}

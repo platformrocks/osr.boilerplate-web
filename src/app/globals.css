@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@plugin "tailwindcss-animate";
+
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-background: var(--color-white);
+  --color-foreground: var(--color-neutral-900);
+  --color-card: var(--color-white);
+  --color-card-foreground: var(--color-neutral-900);
+  --color-popover: var(--color-white);
+  --color-popover-foreground: var(--color-neutral-900);
+  --color-primary: var(--color-neutral-900);
+  --color-primary-foreground: var(--color-neutral-50);
+  --color-secondary: var(--color-neutral-100);
+  --color-secondary-foreground: var(--color-neutral-900);
+  --color-muted: var(--color-neutral-100);
+  --color-muted-foreground: var(--color-neutral-500);
+  --color-accent: var(--color-neutral-100);
+  --color-accent-foreground: var(--color-neutral-900);
+  --color-destructive: var(--color-rose-500);
+  --color-destructive-foreground: var(--color-neutral-50);
+  --color-border: var(--color-neutral-200);
+  --color-input: var(--color-neutral-200);
+  --color-ring: var(--color-neutral-400);
+  --radius: 0.5rem;
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+}
+
+@layer theme {
+  .dark {
+    --color-background: var(--color-neutral-950);
+    --color-foreground: var(--color-neutral-50);
+    --color-card: var(--color-neutral-950);
+    --color-card-foreground: var(--color-neutral-50);
+    --color-popover: var(--color-neutral-950);
+    --color-popover-foreground: var(--color-neutral-50);
+    --color-primary: var(--color-neutral-50);
+    --color-primary-foreground: var(--color-neutral-900);
+    --color-secondary: var(--color-neutral-800);
+    --color-secondary-foreground: var(--color-neutral-50);
+    --color-muted: var(--color-neutral-800);
+    --color-muted-foreground: var(--color-neutral-400);
+    --color-accent: var(--color-neutral-800);
+    --color-accent-foreground: var(--color-neutral-50);
+    --color-destructive: var(--color-rose-700);
+    --color-destructive-foreground: var(--color-neutral-50);
+    --color-border: var(--color-neutral-800);
+    --color-input: var(--color-neutral-800);
+    --color-ring: var(--color-neutral-300);
+  }
+}
+
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--color-border);
+  }
+}

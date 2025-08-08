@@ -1,0 +1,76 @@
+$schema: .guided/schema/prompt.schema.json
+apiVersion: ops/v1
+id: vcs.commit.semantic-all
+title: Commit all changes using Semantic Commit
+persona: VersionController
+category: implementation
+difficulty: medium
+workspace: ./
+context: |
+  You must commit all current changes in the repository using Semantic Commit format.
+  Examples of Semantic Commit types:
+    - feat: a new feature
+    - fix: a bug fix
+    - chore: changes that don't modify src or test files
+    - docs: changes to documentation
+    - refactor: code change that neither fixes a bug nor adds a feature
+    - style: formatting only (e.g., whitespace)
+    - test: adding or fixing tests
+  The commit message should summarize the overall type of change.
+  The goal is to keep the Git history meaningful and structured.
+output:
+  - file: .guided/operation/worklog.md
+    language: markdown
+    rules:
+      - Include the commit hash, semantic message, type, date and author
+      - Include list of files affected (summary)
+steps:
+  - id: check-diff
+    description: Analyze the current changes to understand the type of modification
+    action: |
+      Run `git diff --cached --stat` to get a summary of changes.
+      If no files are staged, run `git diff --stat` to show unstaged changes.
+      Based on file types and content, suggest the most appropriate semantic commit type.
+    expectedOutcome: |
+      Summary of changes with a proposed semantic type like `feat`, `fix`, `docs`, `chore`, etc.
+
+  - id: stage-all
+    description: Stage all project changes
+    action: |
+      Run `git add .`
+    expectedOutcome: |
+      All files are staged for commit.
+
+  - id: generate-message
+    description: Generate a semantic commit message
+    action: |
+      Use the change summary to build a message like:
+      `feat: add user tracking to enrollment module`
+      or
+      `fix: correct null pointer in activity validator`
+    expectedOutcome: |
+      A semantic commit message that reflects the type and purpose of the changes.
+
+  - id: commit
+    description: Commit all staged changes using the semantic message
+    action: |
+      Run `git commit -m "<semantic message>"`
+    expectedOutcome: |
+      All changes are committed with a structured, meaningful commit message.
+
+  - id: log-commit
+    description: Register the commit details in the worklog
+    action: |
+      Run `git log -1 --pretty=format:"- Commit: %H%n  Type: <type>%n  Message: %s%n  Date: %ad%n  Author: %an"` and save it to `.guided/operation/worklog.md`
+      Append a list of changed files via `git diff --name-only HEAD~1`
+    expectedOutcome: |
+      The last commit metadata and file list are logged for traceability.
+
+tags:
+  - git
+  - commit
+  - semantic-commit
+  - version-control
+  - automation
+createdBy: guiofsaints
+version: 1.1.0
