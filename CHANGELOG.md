@@ -1,4 +1,17 @@
-### Changelog
+# Changelog
+
+## 0.2.0 (2025-08-08)
+
+* fix: configure changelog generation and fix release process ([49e163f](https://github.com/platformrocks/boilerplate-web/commit/49e163f))
+
+
+
+## 0.1.0 (2025-08-08)
+
+* docs: update worklog with initial commit details and add prompts ([83d4c38](https://github.com/platformrocks/boilerplate-web/commit/83d4c38))
+* feat: initialize OSR Web AIF boilerplate with complete architecture ([aa8c61b](https://github.com/platformrocks/boilerplate-web/commit/aa8c61b))
+
+##
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
