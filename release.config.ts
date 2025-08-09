@@ -12,7 +12,9 @@ const config = {
     requireUpstream: true,
     changelog: 'npx auto-changelog --stdout --commit-limit false --unreleased --template compact',
   },
-  npm: false,
+  npm: {
+    publish: false,
+  },
   github: {
     release: true,
     releaseName: 'Release v${version}',

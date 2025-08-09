@@ -520,4 +520,120 @@ Successfully committed complete OSR Web AIF boilerplate initialization with:
 
 ---
 
-**Status**: Foundation Complete ✅ **Next Session**: Complete remaining canonical files and schemas **Confidence Level**: High - Strong foundation established for AI-friendly development
+## 2025-08-09 - Guided Development System Implementation
+
+### Semantic Commit Details
+
+- **Commit**: 8f2d1839c9ca238a1dc82531cbc64ce760cd7a50
+- **Type**: feat
+- **Message**: feat: implement guided development system with enhanced i18n architecture
+- **Date**: Sat Aug 9 14:47:39 2025 -0300
+- **Author**: Gui Santos
+
+### Files Modified/Added (36 files)
+
+#### New .guided/ Structure Files
+
+- `.guided/architecture/entities.md` - Domain entities and relationships
+- `.guided/architecture/i18n-centralization.md` - Internationalization architecture
+- `.guided/architecture/rules.md` - Architecture rules and conventions
+- `.guided/assessment/stack.md` - Technology stack assessment
+- `.guided/assessment/structure.md` - Project structure analysis
+- `.guided/operation/troubleshooting.md` - Comprehensive troubleshooting guide
+- `.guided/prompts/prompt.discovery.yaml` - Discovery and analysis prompts
+- `.guided/prompts/prompt.web.generate-design.yaml` - Design system generation
+- `.guided/prompts/prompt.web.generate-layout.yaml` - Layout component generation
+- `.guided/schema/prompt.schema.json` - JSON schema for prompt validation
+- `.guided/testing/playbook.md` - Testing procedures and workflows
+
+#### Configuration Enhancements
+
+- `next.config.ts` - Enhanced with advanced optimization settings
+- `src/config/locales.ts` - Improved locale configuration structure
+- `.env.example` - Updated environment variables
+
+#### Internationalization Restructure
+
+- Renamed `src/i18n/messages/en-US.json` → `src/i18n/messages/en.json`
+- Renamed `src/i18n/messages/es-ES.json` → `src/i18n/messages/es.json`
+- Renamed `src/i18n/messages/pt-BR.json` → `src/i18n/messages/pt.json`
+- Updated `src/i18n/request.ts` and `src/i18n/routing.ts` for new structure
+
+#### Application Updates
+
+- `src/app/[locale]/layout.tsx` - Layout improvements
+- `src/app/[locale]/page.tsx` - Page component updates
+- `src/app/sitemap.ts` - Sitemap generation enhancements
+- `src/components/ui/locale-switcher.tsx` - Locale switcher improvements
+
+#### Directory Structure
+
+- Created placeholder directories: `public/fonts/`, `public/images/`, `src/contants/`, `src/hooks/`, `src/types/`
+- Added `.gitkeep` files for empty directories
+
+#### Cleanup
+
+- Deleted `.guided/product/prd.md` - Reorganized documentation
+- Deleted `.vscode/keybings.json` - Removed deprecated keybindings
+- Deleted `.vscode/tasks.json` - Simplified VS Code configuration
+- Deleted `src/hooks/use-mobile.ts` - Removed unused hook
+- Updated `.vscode/settings.json` - Streamlined configuration
+
+### Major Improvements
+
+#### 1. Guided Development System
+
+- Comprehensive prompt library for AI-assisted development
+- JSON schema validation for prompts
+- Structured discovery and generation workflows
+- Enhanced architectural documentation
+
+#### 2. Internationalization Enhancement
+
+- Simplified locale structure (en, es, pt)
+- Improved configuration management
+- Better locale switching implementation
+- Centralized i18n architecture documentation
+
+#### 3. Development Experience
+
+- Advanced Next.js configuration optimization
+- Comprehensive troubleshooting documentation
+- Enhanced testing playbook procedures
+- Streamlined VS Code workspace settings
+
+#### 4. Architecture Documentation
+
+- Complete domain entities mapping
+- Architectural rules and conventions
+- Technology stack assessment
+- Project structure analysis with scoring
+
+### Commit Impact
+
+**Total Changes**: 36 files modified/added
+
+- **Additions**: 5,910 insertions
+- **Deletions**: 688 deletions
+- **Net Growth**: +5,222 lines of enhanced functionality and documentation
+
+**Key Features Added**:
+
+- Guided prompt system for AI-assisted development
+- Enhanced internationalization architecture
+- Comprehensive troubleshooting and testing documentation
+- Advanced Next.js optimization configuration
+- Streamlined project structure and organization
+
+**Quality Improvements**:
+
+- Better AI assistant integration
+- Enhanced developer experience
+- More maintainable code structure
+- Comprehensive documentation coverage
+- Improved configuration management
+
+---
+
+**Status**: Guided Development System Complete ✅ **Next Session**: Implement additional features or continue development **Confidence Level**: High - Major architectural improvements implemented
+successfully
