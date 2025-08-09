@@ -12,7 +12,7 @@ import { notFound } from 'next/navigation';
 import { ReactNode } from 'react';
 
 import { ThemeProvider } from '@/components/design/theme-provider';
-import { routing } from '@/i18n/routing';
+import { LocaleCode, localeUtils } from '@/config/locales';
 
 import '../globals.css';
 
@@ -23,11 +23,12 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
 
-  if (!isValidLocale(locale)) {
+  if (!localeUtils.isValidLocale(locale)) {
     notFound();
   }
 
   const { metadatas } = await getMessages();
+  const fullLocaleCode = localeUtils.getFullCode(locale as LocaleCode);
 
   return {
     title: {
@@ -39,10 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     metadataBase: new URL('https://opensource.rocks'),
     alternates: {
       canonical: '/',
-      languages: {
-        'en-US': '/en',
-        es: '/es',
-      },
+      languages: localeUtils.generateAlternateLinks(),
     },
     icons: {
       icon: '/icon.png',
@@ -71,7 +69,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           alt: 'Open Source Rocks - Alternative Image',
         },
       ],
-      locale: 'pt-BR',
+      locale: fullLocaleCode,
       type: 'website',
     },
 
@@ -128,15 +126,6 @@ interface LocaleLayoutProps {
 }
 
 /**
- * Validates if the given locale is supported
- * @param locale - The locale string to validate
- * @returns boolean indicating if locale is valid
- */
-function isValidLocale(locale: string): boolean {
-  return routing.locales.includes(locale as (typeof routing.locales)[number]);
-}
-
-/**
  * Locale-specific layout component
  * Provides internationalization context and font variables for the entire application
  *
@@ -148,7 +137,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
   const { locale } = await params;
 
   // Validate locale early
-  if (!isValidLocale(locale)) {
+  if (!localeUtils.isValidLocale(locale)) {
     notFound();
   }
 
@@ -162,8 +151,11 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
     messages = {};
   }
 
+  const textDirection = localeUtils.getTextDirection(locale as LocaleCode);
+  const fullLocaleCode = localeUtils.getFullCode(locale as LocaleCode);
+
   return (
-    <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'} suppressHydrationWarning>
+    <html lang={fullLocaleCode} dir={textDirection} suppressHydrationWarning>
       <head>
         {/* Preconnect para melhor performance */}
         <link rel='preconnect' href='https://fonts.googleapis.com' />

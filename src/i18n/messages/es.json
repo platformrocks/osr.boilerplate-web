@@ -3,7 +3,14 @@
     "title": "Open Source Rocks",
     "description": "Iniciativa de Código Aberto pela platform.rocks",
     "fullDescription": "Iniciativa de Código Aberto pela platform.rocks",
-    "keywords": ["Código Aberto", "platform.rocks", "i18n", "Next.js", "React", "TypeScript"],
+    "keywords": [
+      "Código Aberto",
+      "platform.rocks",
+      "i18n",
+      "Next.js",
+      "React",
+      "TypeScript"
+    ],
     "locale": "es-ES"
   },
   "HomePage": {

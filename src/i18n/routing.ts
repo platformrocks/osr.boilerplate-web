@@ -6,7 +6,9 @@
  */
 import { defineRouting } from 'next-intl/routing';
 
+import { i18nConfig, localeUtils } from '@/config/locales';
+
 export const routing = defineRouting({
-  locales: ['pt-BR', 'en-US', 'es-ES'],
-  defaultLocale: 'pt-BR',
+  locales: localeUtils.getAllLocaleCodes(),
+  defaultLocale: i18nConfig.defaultLocale,
 });

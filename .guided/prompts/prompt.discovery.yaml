@@ -1,0 +1,229 @@
+$schema: .guided/schema/prompt.schema.json
+apiVersion: ops/v1
+id: setup.and.assess.project
+title: Setup Canonical .guided Structure and Run Technical Assessment
+persona: DocumentationEngineer
+workspace: ./
+context: |
+  This prompt performs two main phases:
+
+  **PHASE 1 – Setup Canonical `.guided/` Structure**
+  - Create all folders and files defined in the Guided Engineering documentation standard.
+  - Ensure idempotency: if a folder/file exists, do not overwrite content, only append or update TODO placeholders.
+  - Add headers and minimal boilerplates to all new files.
+  - Ensure `.guided/base/structure.md` documents the exact canonical list of files, purposes, and naming rules.
+
+  **PHASE 2 – Full Technical Assessment**
+  - Perform an in-depth technical discovery of the repository.
+  - Analyze structure, product scope, personas, architecture, stack, entities, testing strategy, plugins, and operational risks.
+  - Write each analysis into the corresponding `.guided/` category.
+  - Generate an assessment summary with strengths, weaknesses, and recommended next steps.
+  - Update `.guided/operation/worklog.md` with all actions, timestamp, and prompt ID.
+
+  dependencies:
+    - Full access to the source code
+    - File system access to `.guided/`
+    - Knowledge of Guided Engineering documentation standards
+
+steps:
+  # PHASE 1 – STRUCTURE SETUP
+  - id: create-guided-folders
+    title: Create canonical `.guided/` folders
+    actions: |
+      - Create the following folders if not present:
+        * .guided/base/
+        * .guided/architecture/
+        * .guided/assessment/
+        * .guided/testing/
+        * .guided/operation/
+        * .guided/prompts/
+        * .guided/schema/
+        * .guided/context/
+        * .guided/tmp/
+
+  - id: create-canonical-files
+    title: Create canonical files with headers and placeholders
+    actions: |
+      - For each file below, create if not present. If exists, preserve content and append missing headers.
+      - Add standard header:
+        ```
+        <!--
+        Guided Engineering Canonical File
+        DO NOT REMOVE THIS HEADER
+        Purpose: [short description]
+        -->
+        ```
+      - File list:
+
+        # base/
+        - .guided/base/project.structure.md
+        - .guided/base/setup.instructions.md
+        - .guided/base/structure.md
+
+        # product/
+        - .guided/product/prd.md
+        - .guided/product/roadmap.md
+        - .guided/product/personas.md
+
+        # architecture/
+        - .guided/architecture/stack.md
+        - .guided/architecture/rules.md
+        - .guided/architecture/context.md
+        - .guided/architecture/entities.md
+        - .guided/architecture/guided.md
+        - .guided/architecture/guardrails.md
+        - .guided/architecture/plugins.md
+
+        # assessment/
+        - .guided/assessment/summary.md
+        - .guided/assessment/structure.md
+        - .guided/assessment/stack.md
+        - .guided/assessment/entities.md
+        - .guided/assessment/plugins.md
+        - .guided/assessment/risks.md
+        - .guided/assessment/personas.md
+
+        # testing/
+        - .guided/testing/strategy.md
+        - .guided/testing/playbook.md
+        - .guided/testing/coverage.md
+        - .guided/testing/risks.md
+
+        # operation/
+        - .guided/operation/worklog.md
+        - .guided/operation/changelog.md
+        - .guided/operation/troubleshooting.md
+        - .guided/operation/faq.md
+
+        # context/
+        - .guided/context/local.md
+        - .guided/context/env.md
+
+  - id: write-reference-structure
+    title: Document `.guided` structure reference
+    actions: |
+      - List all folders and expected files in `.guided/`
+      - Add a table with columns: `Path`, `Purpose`, `Naming Rules`
+    output: .guided/base/structure.md
+
+  - id: verify-structure-completeness
+    title: Verify created structure
+    actions: |
+      - Check if all canonical folders and files exist
+      - Append verification result to `.guided/operation/worklog.md`
+
+  # PHASE 2 – TECHNICAL ASSESSMENT
+  - id: detectDeveloperEnvironment
+    title: Detect and document developer environment
+    actions: |
+      - Identify OS, shell, terminal, package manager, Node, Python, Git, Docker, etc.
+      - Include versions and relevant build/test tools
+    output: .guided/tmp/system.context.md
+
+  - id: documentProjectStructure
+    title: Document project folder structure
+    actions: |
+      - Describe top-level folders, modules, workspaces
+    output: .guided/base/project.structure.md
+
+  - id: summarizeProductScope
+    title: Summarize product scope and audience
+    actions: |
+      - List main features, user types, use cases, goals
+    output: .guided/product/prd.md
+
+  - id: listProductPersonas
+    title: Document product-facing personas
+    actions: |
+      - Describe each persona, needs, pain points
+    output: .guided/product/personas.md
+
+  - id: analyzeArchitectureContext
+    title: Analyze architecture boundaries and contexts
+    actions: |
+      - Identify layers, bounded contexts, data/control flow
+    output: .guided/architecture/context.md
+
+  - id: analyzeEntities
+    title: Document core domain entities and relationships
+    actions: |
+      - Identify schemas, rules, relationships
+    output: .guided/architecture/entities.md
+
+  - id: documentArchitectureStack
+    title: Document architecture and tech stack
+    actions: |
+      - List languages, frameworks, runtimes, infrastructure
+    output: .guided/architecture/stack.md
+
+  - id: listPlugins
+    title: Describe plugins or extensibility mechanisms
+    actions: |
+      - Identify plugin points and integration strategies
+    output: .guided/architecture/plugins.md
+
+  - id: analyzeTestStrategy
+    title: Document testing strategy and tools
+    actions: |
+      - List test types, tools, automation coverage
+    output: .guided/testing/strategy.md
+
+  - id: identifyTestingRisks
+    title: Identify testing gaps and risks
+    actions: |
+      - Highlight untested areas and potential failures
+    output: .guided/testing/risks.md
+
+  - id: assessOperationalRisks
+    title: Document operational and maintenance risks
+    actions: |
+      - Identify fragile areas, instability points, incident history
+    output: .guided/operation/troubleshooting.md
+
+  - id: summarizeChangeLog
+    title: Update changelog
+    actions: |
+      - Summarize version history and major changes
+    output: .guided/operation/changelog.md
+
+  - id: defineEngineeringGuardrails
+    title: Define technical guardrails
+    actions: |
+      - Extract rules and conventions from codebase
+      - Classify as Mandatory, Recommended, Optional
+    output: .guided/architecture/guardrails.md
+
+  - id: writeAssessmentSummary
+    title: Write overall assessment summary
+    actions: |
+      - Summarize strengths, weaknesses, outputs, and next steps
+    output: .guided/assessment/summary.md
+
+  - id: register-worklog
+    title: Register actions in worklog
+    actions: |
+      - Append timestamp, prompt ID, and executed steps
+    output: .guided/operation/worklog.md
+
+output:
+  - file: .guided/base/structure.md
+    language: markdown
+  - file: .guided/operation/worklog.md
+    language: markdown
+    rules:
+      - Must follow `.guided/template.worklog.md`
+  - file: .guided/assessment/summary.md
+    language: markdown
+
+tags:
+  - setup
+  - structure
+  - documentation
+  - assessment
+  - architecture
+  - product
+  - testing
+  - guardrails
+
+createdBy: guiofsaints
+version: 5

@@ -1,0 +1,139 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schema.guided.dev/prompt.schema.json",
+  "title": "Guided Prompt Schema",
+  "description": "Schema for .guided prompt configuration files",
+  "type": "object",
+  "required": [
+    "$schema",
+    "apiVersion",
+    "id",
+    "title",
+    "persona",
+    "category",
+    "workspace",
+    "context",
+    "steps"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema reference"
+    },
+    "apiVersion": {
+      "type": "string",
+      "pattern": "^ops/v\\d+$",
+      "description": "API version in format ops/vX"
+    },
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the prompt"
+    },
+    "title": {
+      "type": "string",
+      "description": "Human-readable title for the prompt"
+    },
+    "persona": {
+      "type": "string",
+      "description": "The persona or role this prompt represents"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "implementation",
+        "testing",
+        "documentation",
+        "deployment",
+        "analysis"
+      ],
+      "description": "Category of the prompt"
+    },
+    "workspace": {
+      "type": "string",
+      "description": "Workspace path or identifier"
+    },
+    "baseDomain": {
+      "type": "string",
+      "description": "Base domain from environment variable",
+      "default": "${BASE_DOMAIN}"
+    },
+    "context": {
+      "type": "string",
+      "description": "Context description for the prompt"
+    },
+    "output": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "file",
+          "language"
+        ],
+        "properties": {
+          "file": {
+            "type": "string",
+            "description": "Output file path"
+          },
+          "language": {
+            "type": "string",
+            "description": "Output language/format"
+          },
+          "rules": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Rules for output generation"
+          }
+        }
+      }
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "description",
+          "action",
+          "expectedOutcome"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Step identifier"
+          },
+          "description": {
+            "type": "string",
+            "description": "Step description"
+          },
+          "action": {
+            "type": "string",
+            "description": "Action to perform"
+          },
+          "expectedOutcome": {
+            "type": "string",
+            "description": "Expected outcome of the action"
+          }
+        }
+      }
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Tags for categorization"
+    },
+    "createdBy": {
+      "type": "string",
+      "description": "Creator of the prompt"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Version in semver format"
+    }
+  },
+  "additionalProperties": false
+}

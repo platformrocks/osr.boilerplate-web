@@ -9,7 +9,7 @@ import Image from 'next/image';
 
 import { Card, CardContent } from '@/components/ui/card';
 import { LocaleSwitcher } from '@/components/ui/locale-switcher';
-import { SUPPORTED_LOCALES } from '@/config/locales';
+import { i18nConfig } from '@/config/locales';
 
 import { ModeToggle } from '../../components/ui/mode-toggle';
 
@@ -43,7 +43,7 @@ export default async function Home({ params }: HomeProps) {
 
         {/* Language Switcher */}
         <nav aria-label={t('languageSwitcher')} className='mt-8 flex'>
-          <LocaleSwitcher currentLocale={locale} locales={SUPPORTED_LOCALES} />
+          <LocaleSwitcher currentLocale={locale} locales={i18nConfig.locales} />
           <ModeToggle />
         </nav>
       </Card>

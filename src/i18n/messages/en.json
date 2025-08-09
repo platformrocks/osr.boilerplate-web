@@ -3,7 +3,14 @@
     "title": "Open Source Rocks",
     "description": "Open Source Iniciative by platform.rocks",
     "fullDescription": "Open Source Iniciative by platform.rocks",
-    "keywords": ["Open Source", "platform.rocks", "i18n", "Next.js", "React", "TypeScript"],
+    "keywords": [
+      "Open Source",
+      "platform.rocks",
+      "i18n",
+      "Next.js",
+      "React",
+      "TypeScript"
+    ],
     "locale": "en-US"
   },
   "HomePage": {

@@ -5,11 +5,13 @@
  * License: MIT
  */
 import { useTranslations } from 'next-intl';
-import Link from 'next/link';
+
+import { LocaleConfig } from '@/config/locales';
+import { Link } from '@/i18n/navigation';
 
 interface LocaleSwitcherProps {
   currentLocale: string;
-  locales: ReadonlyArray<{ readonly code: string; readonly label: string; readonly name: string }>;
+  locales: readonly LocaleConfig[];
 }
 
 /**
@@ -29,7 +31,8 @@ export function LocaleSwitcher({ currentLocale, locales }: LocaleSwitcherProps) 
         return (
           <Link
             key={locale.code}
-            href={`/${locale.code}`}
+            href='/'
+            locale={locale.code}
             className={`hover:bg-accent hover:text-accent-foreground focus:ring-ring inline-flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors duration-200 ease-in-out focus:ring-2 focus:ring-offset-2 focus:outline-none ${
               isActive
                 ? 'bg-primary text-primary-foreground'

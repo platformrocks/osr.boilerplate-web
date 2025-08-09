@@ -4,7 +4,6 @@ id: vcs.commit.semantic-all
 title: Commit all changes using Semantic Commit
 persona: VersionController
 category: implementation
-difficulty: medium
 workspace: ./
 context: |
   You must commit all current changes in the repository using Semantic Commit format.

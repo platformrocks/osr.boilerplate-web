@@ -1,0 +1,780 @@
+$schema: .guided/schema/prompt.schema.json
+apiVersion: ops/v1
+id: web.generate-layout
+title: Generate base layout with navigation, theme, and i18n
+persona: |
+  You are Frontend Engineer, Specialist in creating scalable, and visually balanced layouts for web
+  applications, websites, and dashboards. Focuses on grid systems, spacing, alignment,
+  and responsive design patterns that enhance usability and content hierarchy.
+  responsibilities:
+    - Establish grid, spacing, and alignment guidelines.
+    - Create frontend for key screens and breakpoints.
+    - Define navigation and content hierarchy.
+    - Ensure visual rhythm and balance across pages.
+    - Collaborate with style system designers for consistency.
+    - Keep layouts clean and minimal.
+    - Avoid excessive nesting and unnecessary containers.
+    - Maintain consistent spacing and alignment rules.
+category: implementation
+workspace: ./src
+context: |
+  This project uses:
+
+  - Next.js 15 App Router (`src/app/[locale]/layout.tsx`)
+  - Tailwind CSS v4 for responsive styling with breakpoints: sm:640px, md:768px, lg:1024px, xl:1280px
+  - shadcn/ui for component primitives (Button, Sheet, DropdownMenu, Card)
+  - `next-themes` for light/dark theme support with ThemeProvider
+  - `next-intl` for internationalization with useTranslations hook
+  - Locale-based routing with translation JSONs in `src/i18n/messages/(pt-BR|en-US|es-ES).json`
+
+  CRITICAL REQUIREMENTS - The layout must:
+
+  - Follow semantic HTML structure: `<header>`, `<main>`, `<footer>`, `<aside>` with proper ARIA
+  - Include responsive header with logo, navigation, and theme toggle
+  - Support mobile-first responsive design with breakpoint-specific behavior
+  - Support optional sidebar (collapsible on mobile) and footer components
+  - Support i18n for all navigation links using `useTranslations('layout')`
+  - Use `ThemeProvider` from `next-themes` with proper theme attribute configuration
+  - Include SPDX-License-Identifier: MIT license headers in all components
+  - Follow accessibility best practices: skip links, ARIA labels, keyboard navigation
+  - Validate with Prettier, ESLint, and TypeScript strict mode
+
+  EXISTING PATTERNS TO FOLLOW:
+  - Import structure: shadcn/ui components from '@/components/ui/*'
+  - Font loading: Inter from 'next/font/google' with latin subset
+  - Theme toggle: Custom component using useTheme from next-themes
+  - Mobile menu: Sheet component from shadcn/ui with proper state management
+
+output:
+  - file: src/app/[locale]/layout.tsx
+    language: typescript
+    rules:
+      - MUST include SPDX license header and proper imports
+      - Use `ThemeProvider` from `next-themes` with attribute="class" and defaultTheme="system"
+      - Render `Header`, optional `Sidebar` and `Footer` based on user selection
+      - Wrap page content with `children` in `<main>` tag with proper className
+      - Use `<html lang={locale} suppressHydrationWarning>` and `<body className={inter.className}>`
+      - Include NextIntlClientProvider if needed for client components
+  - file: src/components/layout/Header.tsx
+    language: typescript
+    rules: |
+      - MUST be responsive with mobile hamburger menu using Sheet component
+      - Include logo/brand, navigation links, and theme toggle button
+      - Use i18n via `t('nav.home')`, `t('nav.about')`, etc.
+      - Proper ARIA labels and keyboard navigation support
+      - Mobile: hidden nav links, hamburger menu. Desktop: full nav bar
+  - file: src/components/layout/Sidebar.tsx (conditional)
+    language: typescript
+    rules: |
+      - Generate ONLY if user selects sidebar option
+      - Static or collapsible sidebar with navigation icons and labels
+      - Use aside semantic tag with proper ARIA navigation role
+      - Responsive: hidden on mobile, visible/collapsible on desktop
+  - file: src/components/layout/Footer.tsx (conditional)
+    language: typescript
+    rules: |
+      - Generate ONLY if user selects footer option
+      - Simple footer with copyright, links, and company info
+      - Use footer semantic tag with proper landmark role
+  - file: src/components/layout/ThemeToggle.tsx
+    language: typescript
+    rules: |
+      - Custom theme toggle component using useTheme hook
+      - Button with Sun/Moon icons from lucide-react
+      - Proper ARIA labels and keyboard support
+  - file: src/i18n/messages/pt-BR.json
+    language: json
+    rules: |
+      - Add complete `layout` namespace with nav, theme, and accessibility keys
+      - Use natural Brazilian Portuguese
+  - file: src/i18n/messages/en-US.json
+    language: json
+    rules: |
+      - Mirror pt-BR structure with professional English
+  - file: src/i18n/messages/es-ES.json
+    language: json
+    rules: |
+      - Mirror pt-BR structure with neutral Spanish
+  - file: .guided/operation/worklog.md
+    language: markdown
+    rules: |
+      - Log layout type, menu type, components created, features included, ISO timestamp
+
+steps:
+  - id: analyze-project-context
+    description: Validate project structure and required dependencies
+    action: |
+      VERIFY these exact requirements:
+        - `src/app/[locale]` directory structure exists
+        - `src/components/layout/` directory exists or can be created
+        - Required packages installed in package.json:
+          - next-themes: "^0.2.1" or higher
+          - next-intl: "^3.0.0" or higher
+          - lucide-react: for icons (Sun, Moon, Menu, X)
+        - shadcn/ui components available:
+          - Button: `@/components/ui/button`
+          - Sheet: `@/components/ui/sheet`
+          - DropdownMenu: `@/components/ui/dropdown-menu`
+        - `src/i18n/messages/*.json` files exist for pt-BR, en-US, es-ES
+        - Tailwind CSS configured with theme variables and dark mode support
+
+      CHECK for potential conflicts:
+        - Existing layout.tsx in src/app/[locale]/
+        - Existing Header/Sidebar/Footer components
+
+      IF missing dependencies, PROVIDE installation commands:
+      ```bash
+      npm install next-themes lucide-react
+      npx shadcn-ui@latest add button sheet dropdown-menu
+      ```
+    expectedOutcome: |
+      Project structure validated, all dependencies confirmed available
+      Clear path for layout generation without conflicts
+
+  - id: collect-layout-preferences
+    description: Gather specific layout requirements with detailed options
+    action: |
+      ASK USER these structured questions with clear examples:
+
+      ## 1. Layout Structure (choose one number):
+      1. **Header + Content** - Site simples, sem sidebar/footer
+         Components: Header + Main content area
+
+      2. **Header + Content + Footer** - Site institucional básico
+         Components: Header + Main + Footer
+
+      3. **Sidebar Left + Header + Content** - Dashboard básico
+         Components: Fixed Sidebar + Header + Main
+
+      4. **Shell Layout** - Dashboard completo (Header + Sidebar + Footer + Content)
+         Components: All layout components with responsive behavior
+
+      5. **Centered Card** - Para páginas auth/login
+         Components: Minimal header + Centered content card
+
+      6. **Mobile-first** - Top header + Bottom navigation
+         Components: Header + Main + Bottom Nav Bar
+
+      7. **App com Tabs** - Navigation via tabs no header
+         Components: Header with tabs + Main content
+
+      ## 2. Menu/Navigation Style (choose one letter):
+      A. **Top Navbar** - Links horizontais no header
+      B. **Sidebar Fixed** - Menu lateral sempre visível
+      C. **Sidebar Collapsible** - Menu lateral que colapsa/expande
+      D. **Breadcrumb** - Navegação em migalhas de pão
+      E. **Hamburger** - Menu mobile com botão hamburger
+      F. **Bottom Navigation** - Menu fixo na parte inferior
+      G. **Command Menu** - Menu de comando acionado por `⌘K`
+      H. **Tabs** - Navegação por tabs no topo
+      I. **None** - Sem navegação (páginas isoladas)
+
+      ## 3. Navigation Links (required):
+      **Question:** "Quais links devem estar no menu?"
+      **Format:** Lista separada por vírgulas
+      **Examples:**
+      - "Home, Sobre, Contato, Login"
+      - "Dashboard, Relatórios, Configurações, Perfil"
+      - "Início, Produtos, Serviços, Blog, Contato"
+      **Validation:** Minimum 2 links, maximum 8 links for optimal UX
+
+      ## 4. Component Options:
+      - **Include Sidebar?** (true/false) - Default: based on layout choice
+      - **Include Footer?** (true/false) - Default: based on layout choice
+      - **Dark theme support?** (true/false) - Default: true
+      - **i18n navigation?** (true/false) - Default: true
+
+      ## 5. Responsive Behavior:
+      - **Mobile breakpoint:** How should navigation behave on mobile?
+        - hamburger: Convert to hamburger menu
+        - bottom: Move navigation to bottom bar
+        - tabs: Keep as horizontal tabs (scroll if needed)
+
+      ## 6. Brand/Logo:
+      **Question:** "Qual o nome/texto do logo?"
+      **Default:** "App Name"
+      **Usage:** Will be displayed in header as clickable home link
+    expectedOutcome: |
+      Complete layout specification:
+      - Layout type and components to generate
+      - Navigation style and responsive behavior
+      - Exact navigation links with proper naming
+      - Component inclusion preferences
+      - Internationalization requirements
+
+  - id: scaffold-structure
+    description: Create directory structure and component files
+    action: |
+      CREATE directory structure:
+        - Ensure `src/components/layout/` exists
+
+      GENERATE placeholder files based on user selections:
+        - `src/app/[locale]/layout.tsx` (always)
+        - `src/components/layout/Header.tsx` (always)
+        - `src/components/layout/ThemeToggle.tsx` (if theme support)
+        - `src/components/layout/Sidebar.tsx` (if sidebar selected)
+        - `src/components/layout/Footer.tsx` (if footer selected)
+
+      VERIFY no file conflicts exist, backup existing files if needed
+    expectedOutcome: |
+      Clean file structure ready for component implementation
+      All required directories and placeholder files created
+
+  - id: implement-header
+    description: Build responsive header component with navigation
+    action: |
+      GENERATE Header.tsx with this EXACT structure:
+
+      ```typescript
+      'use client'
+
+      import { useState } from 'react'
+      import { useTranslations } from 'next-intl'
+      import { Button } from '@/components/ui/button'
+      import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+      import { Menu, X } from 'lucide-react'
+      import { ThemeToggle } from './ThemeToggle'
+
+      export function Header() {
+        const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+        const t = useTranslations('layout')
+
+        const navLinks = [
+          // Generate based on user's navigation links input
+        ]
+
+        return (
+          <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+            <div className="container flex h-14 items-center">
+              {/* Logo/Brand */}
+              <div className="mr-4 hidden md:flex">
+                <a className="mr-6 flex items-center space-x-2" href="/">
+                  <span className="hidden font-bold sm:inline-block">
+                    {/* User's brand name */}
+                  </span>
+                </a>
+              </div>
+
+              {/* Desktop Navigation */}
+              <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
+                <nav className="hidden md:flex md:space-x-6">
+                  {navLinks.map((link) => (
+                    <a
+                      key={link.href}
+                      href={link.href}
+                      className="text-foreground/60 transition-colors hover:text-foreground/80"
+                    >
+                      {t(`nav.${link.key}`)}
+                    </a>
+                  ))}
+                </nav>
+
+                {/* Theme Toggle */}
+                <ThemeToggle />
+
+                {/* Mobile Menu Trigger */}
+                <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+                  <SheetTrigger asChild className="md:hidden">
+                    <Button variant="ghost" size="icon">
+                      <Menu className="h-5 w-5" />
+                      <span className="sr-only">{t('actions.menu')}</span>
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent side="left">
+                    {/* Mobile Navigation Content */}
+                  </SheetContent>
+                </Sheet>
+              </div>
+            </div>
+          </header>
+        )
+      }
+      ```
+
+      CUSTOMIZE based on user selections:
+      - Navigation links array from user input
+      - Brand name from user input
+      - Menu style (hamburger, tabs, etc.)
+      - Responsive breakpoints for different behaviors
+    expectedOutcome: |
+      Fully functional, responsive Header component with:
+      - Mobile hamburger menu with Sheet component
+      - Desktop navigation with proper spacing
+      - Theme toggle integration
+      - Internationalization support
+      - Accessibility features (ARIA, keyboard support)
+
+  - id: implement-sidebar
+    description: Build Sidebar component if selected by user
+    action: |
+      IF user selected sidebar (layout types 3, 4, or menu styles B, C):
+
+      GENERATE Sidebar.tsx:
+      ```typescript
+      'use client'
+
+      import { useTranslations } from 'next-intl'
+      import { Button } from '@/components/ui/button'
+      import { ChevronLeft, ChevronRight } from 'lucide-react'
+      import { useState } from 'react'
+
+      interface SidebarProps {
+        collapsible?: boolean
+      }
+
+      export function Sidebar({ collapsible = false }: SidebarProps) {
+        const [collapsed, setCollapsed] = useState(false)
+        const t = useTranslations('layout')
+
+        return (
+          <aside className={`
+            hidden lg:flex flex-col border-r bg-background/95
+            ${collapsed ? 'w-16' : 'w-64'}
+            transition-all duration-300
+          `}>
+            {/* Sidebar Header */}
+            <div className="flex h-14 items-center border-b px-4">
+              {!collapsed && (
+                <span className="font-semibold">{/* App name */}</span>
+              )}
+              {collapsible && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setCollapsed(!collapsed)}
+                  className="ml-auto"
+                >
+                  {collapsed ? <ChevronRight /> : <ChevronLeft />}
+                </Button>
+              )}
+            </div>
+
+            {/* Navigation */}
+            <nav className="flex-1 space-y-2 p-4">
+              {/* Generate nav items based on user input */}
+            </nav>
+          </aside>
+        )
+      }
+      ```
+
+      ELSE skip sidebar generation
+    expectedOutcome: |
+      Conditional Sidebar component with:
+      - Collapsible functionality if requested
+      - Responsive visibility (hidden on mobile)
+      - Navigation items with proper spacing
+      - Smooth transitions
+
+  - id: implement-footer
+    description: Build Footer component if selected by user
+    action: |
+      IF user selected footer (layout types 2, 4, or user explicitly requested):
+
+      GENERATE Footer.tsx:
+      ```typescript
+      import { useTranslations } from 'next-intl'
+
+      export function Footer() {
+        const t = useTranslations('layout')
+        const currentYear = new Date().getFullYear()
+
+        return (
+          <footer className="border-t bg-background">
+            <div className="container flex flex-col items-center justify-between gap-4 py-6 md:h-16 md:flex-row md:py-0">
+              <div className="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+                <p className="text-center text-sm leading-loose md:text-left">
+                  © {currentYear} {/* Brand name */}. {t('footer.rights')}
+                </p>
+              </div>
+
+              {/* Optional footer links */}
+              <nav className="flex gap-4">
+                <a href="/privacy" className="text-sm text-muted-foreground hover:text-foreground">
+                  {t('footer.privacy')}
+                </a>
+                <a href="/terms" className="text-sm text-muted-foreground hover:text-foreground">
+                  {t('footer.terms')}
+                </a>
+              </nav>
+            </div>
+          </footer>
+        )
+      }
+      ```
+
+      ELSE skip footer generation
+    expectedOutcome: |
+      Clean Footer component with:
+      - Copyright information with current year
+      - Optional footer navigation links
+      - Responsive design with proper spacing
+
+  - id: implement-theme-toggle
+    description: Create theme toggle component for dark/light mode
+    action: |
+      IF user selected theme support:
+
+      GENERATE ThemeToggle.tsx:
+      ```typescript
+      'use client'
+
+      import { useTheme } from 'next-themes'
+      import { Button } from '@/components/ui/button'
+      import { Sun, Moon } from 'lucide-react'
+      import { useTranslations } from 'next-intl'
+
+      export function ThemeToggle() {
+        const { theme, setTheme } = useTheme()
+        const t = useTranslations('layout')
+
+        return (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+            aria-label={t('theme.toggle')}
+          >
+            <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+            <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+            <span className="sr-only">{t('theme.toggle')}</span>
+          </Button>
+        )
+      }
+      ```
+    expectedOutcome: |
+      Theme toggle component with smooth icon transitions
+      Proper ARIA labels and accessibility support
+
+  - id: implement-layout-shell
+    description: Compose main layout.tsx using selected components
+    action: |
+      GENERATE src/app/[locale]/layout.tsx with EXACT structure:
+
+      ```typescript
+      import { Inter } from 'next/font/google'
+      import { ThemeProvider } from 'next-themes'
+      import { NextIntlClientProvider } from 'next-intl'
+      import { getMessages } from 'next-intl/server'
+
+      import { Header } from '@/components/layout/Header'
+      // Conditional imports based on user selections
+      import { Sidebar } from '@/components/layout/Sidebar'
+      import { Footer } from '@/components/layout/Footer'
+
+      import './globals.css'
+
+      const inter = Inter({ subsets: ['latin'] })
+
+      export const metadata = {
+        title: 'App Name',
+        description: 'App description',
+      }
+
+      export default async function RootLayout({
+        children,
+        params: { locale }
+      }: {
+        children: React.ReactNode
+        params: { locale: string }
+      }) {
+        const messages = await getMessages()
+
+        return (
+          <html lang={locale} suppressHydrationWarning>
+            <body className={inter.className}>
+              <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+                <NextIntlClientProvider locale={locale} messages={messages}>
+                  <div className="min-h-screen flex flex-col">
+                    <Header />
+
+                    <div className="flex flex-1">
+                      {/* Conditional Sidebar */}
+                      {/* INCLUDE_SIDEBAR && <Sidebar /> */}
+
+                      <main className="flex-1 p-6">
+                        {children}
+                      </main>
+                    </div>
+
+                    {/* Conditional Footer */}
+                    {/* INCLUDE_FOOTER && <Footer /> */}
+                  </div>
+                </NextIntlClientProvider>
+              </ThemeProvider>
+            </body>
+          </html>
+        )
+      }
+      ```
+
+      CUSTOMIZE structure based on user's layout choice:
+      - Layout type 1: Header + Main only
+      - Layout type 2: Header + Main + Footer
+      - Layout type 3: Sidebar + Header + Main
+      - Layout type 4: Header + Sidebar + Main + Footer
+      - etc.
+    expectedOutcome: |
+      Complete layout composition with:
+      - Proper HTML semantic structure
+      - ThemeProvider configuration
+      - NextIntl client provider setup
+      - Conditional component rendering
+      - Responsive flex layout system
+
+  - id: implement-i18n
+    description: Add comprehensive translation keys for layout components
+    action: |
+      UPDATE each locale file with complete layout namespace:
+
+      **src/i18n/messages/pt-BR.json:**
+      ```json
+      {
+        "layout": {
+          "nav": {
+            // Generate based on user's navigation links
+            // Example: "home": "Início", "about": "Sobre", etc.
+          },
+          "theme": {
+            "toggle": "Alternar tema",
+            "light": "Tema claro",
+            "dark": "Tema escuro",
+            "system": "Sistema"
+          },
+          "actions": {
+            "menu": "Abrir menu",
+            "close": "Fechar",
+            "toggle": "Alternar",
+            "skipToContent": "Pular para o conteúdo"
+          },
+          "footer": {
+            "rights": "Todos os direitos reservados.",
+            "privacy": "Privacidade",
+            "terms": "Termos de Uso"
+          },
+          "accessibility": {
+            "mainNavigation": "Navegação principal",
+            "skipNavigation": "Pular navegação"
+          }
+        }
+      }
+      ```
+
+      **src/i18n/messages/en-US.json:**
+      ```json
+      {
+        "layout": {
+          "nav": {
+            // English translations of user's nav links
+          },
+          "theme": {
+            "toggle": "Toggle theme",
+            "light": "Light theme",
+            "dark": "Dark theme",
+            "system": "System"
+          },
+          "actions": {
+            "menu": "Open menu",
+            "close": "Close",
+            "toggle": "Toggle",
+            "skipToContent": "Skip to content"
+          },
+          "footer": {
+            "rights": "All rights reserved.",
+            "privacy": "Privacy",
+            "terms": "Terms of Service"
+          },
+          "accessibility": {
+            "mainNavigation": "Main navigation",
+            "skipNavigation": "Skip navigation"
+          }
+        }
+      }
+      ```
+
+      **src/i18n/messages/es-ES.json:**
+      ```json
+      {
+        "layout": {
+          "nav": {
+            // Spanish translations of user's nav links
+          },
+          "theme": {
+            "toggle": "Cambiar tema",
+            "light": "Tema claro",
+            "dark": "Tema oscuro",
+            "system": "Sistema"
+          },
+          "actions": {
+            "menu": "Abrir menú",
+            "close": "Cerrar",
+            "toggle": "Alternar",
+            "skipToContent": "Saltar al contenido"
+          },
+          "footer": {
+            "rights": "Todos los derechos reservados.",
+            "privacy": "Privacidad",
+            "terms": "Términos de Servicio"
+          },
+          "accessibility": {
+            "mainNavigation": "Navegación principal",
+            "skipNavigation": "Saltar navegación"
+          }
+        }
+      }
+      ```
+
+      ENSURE all keys have proper translations, no empty strings
+      GENERATE navigation keys based on user's specified menu items
+    expectedOutcome: |
+      Complete internationalization coverage for:
+      - All navigation links specified by user
+      - Theme toggle and system messages
+      - Footer legal text and links
+      - Accessibility labels and screen reader text
+      - Action buttons and interactive elements
+
+  - id: validate-code
+    description: Run comprehensive code quality checks
+    action: |
+      EXECUTE these validation commands in sequence:
+
+      1. **TypeScript Compilation:**
+         ```bash
+         pnpm type-check
+         ```
+         VERIFY: No type errors, proper imports, interface compliance
+
+      2. **Code Formatting:**
+         ```bash
+         pnpm format:check
+         ```
+         VERIFY: Consistent code style, proper indentation
+
+      3. **Linting:**
+         ```bash
+         pnpm lint
+         ```
+         VERIFY: No ESLint errors, accessibility rules pass
+
+      4. **Build Test:**
+         ```bash
+         pnpm build
+         ```
+         VERIFY: Project builds successfully with new layout
+
+      IF any checks fail:
+      - Display specific error messages with line numbers
+      - Provide suggested fixes for common issues:
+        - Missing imports: Show exact import statements needed
+        - Type errors: Show interface definitions required
+        - Accessibility issues: Show ARIA attributes needed
+      - Re-run checks after applying fixes
+
+      COMMON FIXES to include:
+      - Missing 'use client' directives for interactive components
+      - Incorrect shadcn/ui import paths
+      - Missing TypeScript interfaces for props
+      - Accessibility attributes for navigation elements
+    expectedOutcome: |
+      All code quality checks pass successfully:
+      - TypeScript compilation without errors
+      - Consistent code formatting
+      - ESLint rules compliance including accessibility
+      - Successful project build
+      Layout ready for development use
+
+  - id: log-activity
+    description: Create detailed worklog entry for layout generation
+    action: |
+      APPEND comprehensive entry to .guided/operation/worklog.md:
+
+      ```markdown
+      ## [ISO_TIMESTAMP] - Layout Generated
+
+      **Layout Type:** [Selected layout number and description]
+      **Menu Style:** [Selected menu letter and description]
+      **Brand Name:** [User's brand/logo text]
+
+      **Components Created:**
+      - src/app/[locale]/layout.tsx - Main layout shell
+      - src/components/layout/Header.tsx - Responsive header with navigation
+      - src/components/layout/ThemeToggle.tsx - Dark/light theme toggle
+      - src/components/layout/Sidebar.tsx - [If created, include details]
+      - src/components/layout/Footer.tsx - [If created, include details]
+
+      **Navigation Links:**
+      [List all navigation links with their routes and i18n keys]
+
+      **Features Included:**
+      - **Responsive Design:** Mobile-first with breakpoint-specific behavior
+      - **Dark Theme Support:** [true/false] - next-themes integration
+      - **Internationalization:** [true/false] - pt-BR, en-US, es-ES support
+      - **Accessibility:** ARIA labels, keyboard navigation, screen reader support
+      - **Mobile Menu:** [Hamburger/Bottom nav/Tabs] implementation
+
+      **Technical Details:**
+      - **Framework:** Next.js 15 App Router
+      - **Styling:** Tailwind CSS v4 with shadcn/ui components
+      - **Icons:** Lucide React (Menu, X, Sun, Moon, ChevronLeft, ChevronRight)
+      - **Font:** Inter from Google Fonts with latin subset
+      - **Theme:** next-themes with class attribute and system default
+
+      **Responsive Breakpoints:**
+      - **Mobile (< 768px):** [Describe mobile behavior]
+      - **Tablet (768px - 1024px):** [Describe tablet behavior]
+      - **Desktop (> 1024px):** [Describe desktop behavior]
+
+      **i18n Namespaces Added:**
+      - layout.nav.* - Navigation link translations
+      - layout.theme.* - Theme toggle labels
+      - layout.actions.* - Interactive button labels
+      - layout.footer.* - Footer text and links
+      - layout.accessibility.* - Screen reader labels
+
+      **Code Quality:**
+      - TypeScript strict mode compliance
+      - ESLint accessibility rules passed
+      - Prettier formatting applied
+      - Build successful
+
+      **Next Steps:**
+      - [ ] Test layout on different screen sizes
+      - [ ] Verify theme toggle in all browsers
+      - [ ] Test keyboard navigation flow
+      - [ ] Add any missing navigation links
+      - [ ] Customize brand colors in globals.css
+      - [ ] Add loading states if needed
+
+      **Usage:**
+      Layout is now active for all pages in src/app/[locale]/
+      Navigation links will be translated automatically based on user's locale
+      Theme preference is persisted across browser sessions
+
+      ---
+      ```
+    expectedOutcome: |
+      Comprehensive documentation of layout generation including:
+      - Complete technical specification
+      - All components and features created
+      - Responsive behavior documentation
+      - Internationalization coverage
+      - Quality assurance verification
+      - Clear next steps for customization
+
+tags:
+  - layout
+  - menu
+  - navigation
+  - i18n
+  - theme
+  - nextjs
+  - app-router
+  - responsive
+  - accessibility
+  - scaffold
+  - tailwind
+  - shadcn-ui
+  - dark-mode
+createdBy: guiofsaints
+version: 1.6.0

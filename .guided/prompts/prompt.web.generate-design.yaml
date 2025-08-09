@@ -1,0 +1,460 @@
+$schema: .guided/schema/prompt.schema.json
+apiVersion: ops/v1
+id: web.generate-tailwind-style-system
+title: Generate Tailwind v4 compatible style tokens in globals.css
+persona: |
+  You are Specialist who designs, codifies, and evolves a cohesive visual language using
+  Tailwind CSS (v4+), shadcn/ui, and modern CSS primitives. Balances minimalism,
+  and performance with pragmatic, production-ready choices.
+  responsibilities:
+  - Define design tokens and CSS variables mapped to Tailwind theme.
+  - Configure Tailwind v4 and globals.css to align with tokens and shadcn/ui.
+  deliverables:
+  - src/app/globals.css (authoritative token + layer setup).
+  - shadcn/ui theme mapping and component overrides.
+  - Style guidelines (.guided/architecture/design-system.md).
+  - Lint rules/checklists for consistency.
+  workflow:
+  - Analyze + a11y → define tokens → wire Tailwind theme → validate on key pages → document → enforce via review.
+category: architecture
+workspace: ./src
+context: |
+  This project uses:
+
+  - Tailwind CSS v4 with modern CSS features and native theming
+  - shadcn/ui components requiring specific design tokens
+  - CSS variables in `src/app/globals.css` following Tailwind v4 @theme syntax
+  - Theme switching via `next-themes` using `.dark` class strategy
+  - tailwindcss-animate plugin for component animations
+
+  OBJECTIVE: Generate a complete design token system using Tailwind v4's new @theme directive and official color palette.
+
+  CRITICAL REQUIREMENTS:
+  - Only modify: `src/app/globals.css`
+  - Use Tailwind v4's new @theme directive structure
+  - Use ONLY Tailwind's default color palette (no custom colors)
+  - Follow Tailwind v4 CSS variable patterns with --color-* naming
+  - Include ALL required shadcn/ui tokens
+
+  REQUIRED TAILWIND V4 STRUCTURE:
+  ```css
+  @import "tailwindcss";
+  @plugin "tailwindcss-animate";
+  @variant dark (&:where(.dark, .dark *));
+  @theme { /* light theme tokens */ }
+  @layer theme { .dark { /* dark overrides */ } }
+  @layer base { /* base styles */ }
+  @layer components { /* component styles */ }
+  ```
+
+  REQUIRED SHADCN/UI TOKENS (using --color-* naming):
+  ```css
+  --color-background, --color-foreground
+  --color-primary, --color-primary-foreground
+  --color-secondary, --color-secondary-foreground
+  --color-muted, --color-muted-foreground
+  --color-accent, --color-accent-foreground
+  --color-card, --color-card-foreground
+  --color-popover, --color-popover-foreground
+  --color-border, --color-input, --color-ring
+  --color-destructive, --color-destructive-foreground
+  --radius (with responsive variants)
+  ```
+
+  TAILWIND V4 PATTERNS (MANDATORY):
+  - Use @theme directive for light theme defaults
+  - Use @layer theme with .dark for dark overrides
+  - Reference Tailwind colors: `var(--color-neutral-900)`
+  - Include radius system: --radius, --radius-lg, --radius-md, --radius-sm
+  - Use @apply in base layer for body styles
+
+output:
+  - file: src/app/globals.css
+    language: css
+    requirements:
+      - MUST use Tailwind v4's @theme directive for light theme
+      - MUST use @layer theme with .dark for dark overrides
+      - MUST use --color-* naming convention (not legacy --*)
+      - MUST include ALL shadcn/ui required tokens
+      - MUST reference Tailwind colors via var(--color-*)
+      - MUST include @import "tailwindcss" and @plugin "tailwindcss-animate"
+      - MUST use @variant dark directive
+      - Include responsive radius system and base styles
+
+steps:
+  - id: gather-requirements
+    description: Collect design preferences using Tailwind's design system
+    action: |
+      PRESENT these options to the user (ask all questions in sequence):
+
+      ## 1. Estilo Visual (escolha um número):
+      1. Clean & Minimal - Slate neutrals, design limpo
+      2. Corporate Blue - Azul profissional com slate
+      3. Modern Purple - Roxo moderno com zinc
+      4. Fresh Green - Verde natural com stone
+      5. Warm Orange - Laranja acolhedor com neutral
+      6. Custom - Escolher cor específica do Tailwind
+
+      ## 2. Cor Primária da Marca:
+      Se escolheu "Custom", selecione da paleta Tailwind:
+      - blue-600 - Azul profissional (221.2 83.2% 53.3%)
+      - indigo-600 - Índigo moderno (239 84% 67%)
+      - purple-600 - Roxo criativo (258 90% 66%)
+      - pink-600 - Rosa energético (330 81% 60%)
+      - red-600 - Vermelho impactante (0 84% 60%)
+      - orange-600 - Laranja amigável (21 90% 48%)
+      - amber-600 - Âmbar otimista (45 97% 54%)
+      - yellow-600 - Amarelo vibrante (48 96% 53%)
+      - lime-600 - Lima fresco (65 81% 39%)
+      - green-600 - Verde crescimento (142 71% 45%)
+      - emerald-600 - Esmeralda sofisticado (160 84% 39%)
+      - teal-600 - Verde-azulado equilibrado (178 77% 40%)
+      - cyan-600 - Ciano digital (188 86% 53%)
+      - sky-600 - Azul céu (200 98% 39%)
+
+      ## 3. Base Neutra:
+      - slate - Cinzas frios com toque azul
+      - gray - Cinzas neutros puros
+      - zinc - Cinzas levemente quentes
+      - neutral - Cinzas equilibrados
+      - stone - Bege-acinzentados quentes
+
+      ## 4. Cantos Arredondados:
+      - none - Sem arredondamento (0)
+      - sm - Sutil (0.125rem)
+      - default - Padrão (0.25rem)
+      - md - Médio (0.375rem)
+      - lg - Grande (0.5rem)
+      - xl - Extra grande (0.75rem)
+
+      ## 5. Tipografia:
+      - Inter - Moderno e limpo (padrão)
+      - System - Fontes nativas do OS
+      - Geist - Otimizada da Vercel
+      - Custom - Especificar fonte customizada
+
+      AGUARDE todas as respostas antes de prosseguir.
+    expectedOutcome: |
+      Complete user preferences using Tailwind design system:
+      - Visual direction with Tailwind color foundations
+      - Primary brand color from Tailwind palette
+      - Neutral family selection
+      - Border radius and typography choices
+
+  - id: generate-globals-css
+    description: Create production-ready globals.css with Tailwind v4 @theme directive
+    action: |
+      CREATE `src/app/globals.css` with this EXACT Tailwind v4 structure:
+
+      ```css
+      @import "tailwindcss";
+
+      @plugin "tailwindcss-animate";
+
+      @variant dark (&:where(.dark, .dark *));
+
+      @theme {
+        /* ===== LIGHT THEME DEFAULTS ===== */
+
+        /* Base Layout Colors */
+        --color-background: var(--color-[NEUTRAL_FAMILY]-50);
+        --color-foreground: var(--color-[NEUTRAL_FAMILY]-950);
+
+        /* Card Components */
+        --color-card: var(--color-[NEUTRAL_FAMILY]-50);
+        --color-card-foreground: var(--color-[NEUTRAL_FAMILY]-950);
+
+        /* Popover/Dropdown Components */
+        --color-popover: var(--color-[NEUTRAL_FAMILY]-50);
+        --color-popover-foreground: var(--color-[NEUTRAL_FAMILY]-950);
+
+        /* Primary Brand Colors */
+        --color-primary: var(--color-[PRIMARY_COLOR]-600);
+        --color-primary-foreground: var(--color-[NEUTRAL_FAMILY]-50);
+
+        /* Secondary Interface Colors */
+        --color-secondary: var(--color-[NEUTRAL_FAMILY]-100);
+        --color-secondary-foreground: var(--color-[NEUTRAL_FAMILY]-900);
+
+        /* Muted/Subtle Colors */
+        --color-muted: var(--color-[NEUTRAL_FAMILY]-100);
+        --color-muted-foreground: var(--color-[NEUTRAL_FAMILY]-500);
+
+        /* Accent Colors */
+        --color-accent: var(--color-[NEUTRAL_FAMILY]-100);
+        --color-accent-foreground: var(--color-[NEUTRAL_FAMILY]-900);
+
+        /* Status Colors */
+        --color-destructive: var(--color-red-500);
+        --color-destructive-foreground: var(--color-[NEUTRAL_FAMILY]-50);
+
+        /* Form Elements */
+        --color-border: var(--color-[NEUTRAL_FAMILY]-200);
+        --color-input: var(--color-[NEUTRAL_FAMILY]-200);
+        --color-ring: var(--color-[PRIMARY_COLOR]-600);
+
+        /* Radius System */
+        --radius: [USER_RADIUS_VALUE];
+        --radius-lg: var(--radius);
+        --radius-md: calc(var(--radius) - 2px);
+        --radius-sm: calc(var(--radius) - 4px);
+      }
+
+      @layer theme {
+        /* ===== DARK THEME OVERRIDES ===== */
+        .dark {
+          --color-background: var(--color-[NEUTRAL_FAMILY]-950);
+          --color-foreground: var(--color-[NEUTRAL_FAMILY]-50);
+
+          --color-card: var(--color-[NEUTRAL_FAMILY]-950);
+          --color-card-foreground: var(--color-[NEUTRAL_FAMILY]-50);
+
+          --color-popover: var(--color-[NEUTRAL_FAMILY]-950);
+          --color-popover-foreground: var(--color-[NEUTRAL_FAMILY]-50);
+
+          --color-primary: var(--color-[PRIMARY_COLOR]-400);
+          --color-primary-foreground: var(--color-[NEUTRAL_FAMILY]-950);
+
+          --color-secondary: var(--color-[NEUTRAL_FAMILY]-800);
+          --color-secondary-foreground: var(--color-[NEUTRAL_FAMILY]-50);
+
+          --color-muted: var(--color-[NEUTRAL_FAMILY]-800);
+          --color-muted-foreground: var(--color-[NEUTRAL_FAMILY]-400);
+
+          --color-accent: var(--color-[NEUTRAL_FAMILY]-800);
+          --color-accent-foreground: var(--color-[NEUTRAL_FAMILY]-50);
+
+          --color-destructive: var(--color-red-900);
+          --color-destructive-foreground: var(--color-[NEUTRAL_FAMILY]-50);
+
+          --color-border: var(--color-[NEUTRAL_FAMILY]-800);
+          --color-input: var(--color-[NEUTRAL_FAMILY]-800);
+          --color-ring: var(--color-[PRIMARY_COLOR]-400);
+        }
+      }
+
+      @layer base {
+        /* CSS Reset with Border Colors */
+        *,
+        ::before,
+        ::after {
+          border-color: var(--color-border);
+        }
+
+        /* Body Base Styles */
+        body {
+          @apply bg-background text-foreground;
+          font-family: [USER_FONT_FAMILY];
+          line-height: 1.5;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Smooth Scrolling */
+        html {
+          scroll-behavior: smooth;
+        }
+      }
+
+      @layer components {
+        /* Container Component */
+        .container {
+          @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+        }
+      }
+      ```
+
+      IMPLEMENTATION RULES:
+      1. Replace `[NEUTRAL_FAMILY]` with user's selected neutral (slate/gray/zinc/neutral/stone)
+      2. Replace `[PRIMARY_COLOR]` with user's selected primary color name (blue/indigo/purple/etc.)
+      3. Convert user's radius choice to rem value:
+         - none: 0rem
+         - sm: 0.125rem
+         - default: 0.25rem
+         - md: 0.375rem
+         - lg: 0.5rem
+         - xl: 0.75rem
+      4. Set font family based on user's typography choice:
+         - Inter: `Inter, ui-sans-serif, system-ui, sans-serif`
+         - System: `ui-sans-serif, system-ui, sans-serif`
+         - Geist: `"Geist Sans", ui-sans-serif, system-ui, sans-serif`
+         - Custom: Use provided font name
+      5. Use exact Tailwind color references (var(--color-blue-600) format)
+
+      TAILWIND V4 COLOR MAPPING:
+      - All colors reference Tailwind's built-in CSS variables
+      - Primary colors automatically adjust for dark theme (600→400)
+      - Neutral scales follow semantic relationships (50/100/200/400/500/800/900/950)
+      - Status colors use red-500 (light) and red-900 (dark)
+      - Ring colors match primary for consistency
+
+  - id: validate-implementation
+    description: Ensure perfect Tailwind v4 @theme directive compatibility
+    action: |
+      PERFORM comprehensive validation:
+
+      ## CRITICAL CHECKS
+
+      1. Tailwind v4 Structure Compliance:
+      ```css
+      @import "tailwindcss" (first line)
+      @plugin "tailwindcss-animate" (animation support)
+      @variant dark (&:where(.dark, .dark *)) (dark variant)
+      @theme { } (light theme defaults)
+      @layer theme { .dark { } } (dark overrides)
+      @layer base { } (base styles)
+      @layer components { } (component styles)
+      ```
+
+      2. shadcn/ui Token Completeness (--color-* naming):
+      ```
+      --color-background & --color-foreground
+      --color-primary & --color-primary-foreground
+      --color-secondary & --color-secondary-foreground
+      --color-muted & --color-muted-foreground
+      --color-accent & --color-accent-foreground
+      --color-card & --color-card-foreground
+      --color-popover & --color-popover-foreground
+      --color-border, --color-input, --color-ring
+      --color-destructive & --color-destructive-foreground
+      --radius system (base, lg, md, sm)
+      ```
+
+      3. Tailwind Color Reference Format:
+      ```css
+      /* CORRECT FORMAT */
+      --color-primary: var(--color-blue-600);
+      --color-background: var(--color-neutral-50);
+
+      /* INCORRECT FORMATS */
+      --color-primary: 221.2 83.2% 53.3%;
+      --color-primary: #1e40af;
+      --primary: var(--color-blue-600); /* missing --color- prefix */
+      ```
+
+      4. Responsive Radius System:
+      ```css
+      --radius: [base value]
+      --radius-lg: var(--radius)
+      --radius-md: calc(var(--radius) - 2px)
+      --radius-sm: calc(var(--radius) - 4px)
+      ```
+
+      5. Base Layer Compliance:
+      ```css
+      Border color inheritance: border-color: var(--color-border)
+      Body utility classes: @apply bg-background text-foreground
+      Container component with responsive padding
+      ```
+
+      ## 🔧 AUTO-FIXES
+
+      IF validation fails, automatically correct:
+      - Missing @directives: Add required imports and directives
+      - Wrong naming: Convert to --color-* format
+      - Missing tokens: Add with Tailwind defaults
+      - Incorrect references: Fix to use var(--color-*) format
+      - Layer structure: Reorganize into proper Tailwind v4 layers
+      - Syntax errors: Fix CSS syntax and calc() expressions
+
+      ENSURE final output uses modern Tailwind v4 patterns throughout.
+
+  - id: document-implementation
+    description: Create comprehensive documentation and worklog entry
+    action: |
+      APPEND detailed entry to `.guided/operation/worklog.md`:
+
+      ```markdown
+      ## [ISO_TIMESTAMP] - Tailwind v4 Style System Implementation
+
+      ### Configuration Applied
+      - Visual Style: [Selected direction]
+      - Primary Color: [Tailwind color] ([HSL values])
+      - Neutral Base: [Selected family]
+      - Border Radius: [Selected value]
+      - Typography: [Selected font]
+
+      ### Technical Implementation
+      File Modified: `src/app/globals.css`
+      Framework: Tailwind CSS v4 + shadcn/ui
+      Structure: @theme directive with @layer organization
+      Theme Strategy: CSS variables with .dark overrides
+
+      Modern Tailwind v4 Features:
+      ```
+      @import "tailwindcss" (ESM import)
+      @plugin "tailwindcss-animate" (animation plugin)
+      @variant dark (custom dark variant)
+      @theme directive (light theme defaults)
+      @layer theme (dark theme overrides)
+      --color-* naming (v4 color system)
+      Responsive radius (lg/md/sm variants)
+      ```
+
+      Token Architecture:
+      ```
+      Base Colors (4): background, foreground, card, popover
+      Interactive (6): primary, secondary, accent, muted variants
+      Form Elements (3): border, input, ring
+      Status (2): destructive error states
+      Layout (4): responsive radius system
+      Components (1): container utility
+      ```
+
+      ### Color System Details
+      Light Theme:
+      - Background: [neutral]-50 ([HSL])
+      - Foreground: [neutral]-950 ([HSL])
+      - Primary: [color]-600 ([HSL])
+
+      Dark Theme:
+      - Background: [neutral]-950 ([HSL])
+      - Foreground: [neutral]-50 ([HSL])
+      - Primary: [color]-500 ([HSL])
+
+      ### Quality Assurance
+      - All shadcn/ui tokens implemented with --color-* naming
+      - Tailwind v4 @theme directive structure
+      - Modern @layer organization (theme/base/components)
+      - Responsive radius system (lg/md/sm variants)
+      - WCAG AA accessibility (Tailwind color guarantee)
+      - Semantic color relationships maintained
+      - CSS syntax validation passed
+
+      ### Ready for Development
+      Immediate Usage:
+      - shadcn/ui components work out-of-the-box
+      - Theme switching via `next-themes` with @variant dark
+      - Tailwind utilities inherit --color-* token values
+      - Animation support via tailwindcss-animate plugin
+      - Type-safe CSS variable access
+
+      Developer Experience:
+      - Modern Tailwind v4 patterns throughout
+      - Consistent with latest Tailwind conventions
+      - Easy maintenance using Tailwind color references
+      - Clear semantic naming for team collaboration
+      - Hot reload compatible with @theme directive
+
+      ---
+      ```
+
+      INCLUDE performance metrics and next steps for team reference.
+    expectedOutcome: |
+      Complete documentation of modern Tailwind v4 implementation:
+      - @theme directive and @layer structure details
+      - --color-* token system documentation
+      - Responsive radius system explanation
+      - Developer guidelines for Tailwind v4 patterns
+      - Performance and compatibility metrics
+
+tags:
+  - tailwind-v4
+  - shadcn-ui
+  - design-tokens
+  - css-variables
+  - theme-system
+  - globals-css
+  - hsl-colors
+createdBy: guiofsaints
+version: 3.0.0
